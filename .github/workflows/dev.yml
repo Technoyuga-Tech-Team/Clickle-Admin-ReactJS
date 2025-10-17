@@ -1,0 +1,39 @@
+name: Build Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log into GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Set image name and tag
+        id: vars
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          IMAGE_ID_LOWER=$(echo $IMAGE_ID | tr '[:upper:]' '[:lower:]')
+          echo "image_id=${IMAGE_ID_LOWER}" >> $GITHUB_OUTPUT
+          echo "image_tag=${IMAGE_ID_LOWER}:dev" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ steps.vars.outputs.image_tag }} --build-arg ENV_FILE=$ENV .
+          docker push ${{ steps.vars.outputs.image_tag }}
+          docker rmi ${{ steps.vars.outputs.image_tag }}
+        env:
+          ENV: dev
+
+      - name: Logout from GHCR
+        run: docker logout ghcr.io
