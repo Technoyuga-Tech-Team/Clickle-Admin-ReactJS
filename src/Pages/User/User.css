@@ -1,0 +1,35 @@
+.home-page-main-image-wrapper {
+    height: 600px;
+    min-height: 300px;
+    max-height: 70vh;
+    object-fit: cover;
+    width: 100%;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+
+.slick-slide:focus {
+    outline: none !important;
+}
+
+.slick-prev:focus,
+.slick-next:focus {
+    outline: none !important;
+}
+
+.slick-slide div div {
+    outline: none !important;
+
+}
+
+.full-width {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.next-prev-button-main-wrapper {
+    padding: 10px 20px;
+    border: 1px solid grey;
+    border-radius: 8px;
+    cursor: pointer;
+}
